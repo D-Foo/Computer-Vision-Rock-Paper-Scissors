@@ -12,9 +12,12 @@ while True:
     normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
     data[0] = normalized_image
     prediction = model.predict(data)
+    #frame = cv2.flip(frame, 1)
     cv2.imshow('frame', frame)
     # Press q to close the window
     print(prediction)
+    #temp_list = prediction.tolist()
+    #print("[0] = " + str(temp_list[0][0]))
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
             
