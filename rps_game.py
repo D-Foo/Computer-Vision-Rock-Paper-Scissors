@@ -7,6 +7,8 @@ class Rps:
         self.choice_list = choice_list
         self.computer_choice = ''
         self.player_choice = ''
+        self.player_score = 0
+        self.computer_score = 0
         pass
     
     def play_game(self):
@@ -14,7 +16,7 @@ class Rps:
         self.resolve_choices()
         pass
 
-    def play_with_predetermined_input(self, player_choice):
+    def play_with_camera_input(self, player_choice):
         self.player_choice = player_choice
         self.computer_choice = random.choice(self.choice_list)
         self.resolve_choices()
@@ -42,18 +44,24 @@ class Rps:
         elif(self.player_choice == "rock"):
             if(self.computer_choice == "scissors"):
                 print("Player Wins")
+                self.player_score += 1
             else:
                 print("Computer Wins")
+                self.computer_score += 1
         elif(self.player_choice == "paper"):
             if(self.computer_choice == "rock"):
                 print("Player Wins")
+                self.player_score += 1
             else:
                 print("Computer Wins")
+                self.computer_score += 1
         else:
             if(self.computer_choice == "paper"):
                 print("Player Wins")
+                self.player_score += 1
             else:
                 print("Computer Wins")
+                self.computer_score += 1
         pass
 
 if __name__ == "__main__":

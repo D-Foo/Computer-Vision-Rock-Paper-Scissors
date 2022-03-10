@@ -4,15 +4,7 @@ from keras.models import load_model
 import numpy as np
 import time
 
-choice_list = ["rock", "paper", "scissors"]
-my_rps_game = rps_game.Rps(choice_list)
-model = load_model('RPS_MODEL.h5')
-cap = cv2.VideoCapture(0)
-data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
-
-
-
-
+#Function Defs
 def parse_model_output(prediction):
     #Find largest index in model output and map it to choice list(appended with "nothing")
     prediction_list = prediction.tolist()[0]
@@ -22,29 +14,50 @@ def parse_model_output(prediction):
     print("You chose " + output_list[largest_index])
     return output_list[largest_index]
 
-def render_text(rps_timer, frame):
-    text_str = ""
+def render_text(text_str, frame):
+   
     x = 200
     y = 60
     color = (255, 255, 255)
-    if(rps_timer):
-        text_str = str(rps_timer)
-    else:
-        text_str = "Ready"
     cv2.putText(frame, text_str, (x, y), 0, 1, color, 1, cv2.LINE_AA)
 
+def output_score():
+    print("Results: ")
+    print("Your Score -> " + str(my_rps_game.player_score) + "  :  " + str(my_rps_game.computer_score) + " <- Computer Score")
+    if(my_rps_game.player_score == my_rps_game.computer_score):
+        print("Draw")
+    elif(my_rps_game.player_score > my_rps_game.computer_score):
+        print("You Win!")
+    else:
+        print("Computer Wins!")
+
+#Variables
+choice_list = ["rock", "paper", "scissors"]
+my_rps_game = rps_game.Rps(choice_list)
+model = load_model('RPS_MODEL.h5')
+cap = cv2.VideoCapture(0)
+data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+game_ongoing = False
+rps_countdown = 3.0 #How long to wait before getting user input
+render_text_str = ""
+game_count = 0
+max_game_count = 5
+
 #Main Loop
-while True: 
-    game_start = False
-    rps_countdown = 3.0 #How long to wait before getting user input
-    rps_timer = 0.0     #Timer to track 
-    
+while True:  
+
     #Wait for input for game start/exit program
-    if(game_start):
+    if(game_ongoing):
         #Start 3s countdown 
-        rps_timer = rps_countdown
-        game_start = False
- 
+        time_diff = time.time() - game_start_time
+        if(time_diff >= rps_countdown):
+            game_ongoing = False
+        else:
+            render_text_str = "{:.2f}".format(3.0 - time_diff) + "s"
+    else:
+        render_text_str = "Ready"
+
+    
     #Read webcam input
     ret, frame = cap.read()
     resized_frame = cv2.resize(frame, (224, 224), interpolation = cv2.INTER_AREA)
@@ -54,22 +67,34 @@ while True:
 
     #Flip input and display webcam input
     frame = cv2.flip(frame, 1)
-    render_text(rps_timer, frame)
-    cv2.imshow('frame', frame)
+    render_text(render_text_str, frame)
+    cv2.imshow('frame', frame)    
 
-    #Get output from model
-    prediction = model.predict(data)
+    #Game timed
+    if(game_ongoing == False):
 
-    #Calculate game outcome
-    my_rps_game.play_with_predetermined_input((parse_model_output(prediction)))
+        #Play game at end of timer
+        #Get output from model
+        prediction = model.predict(data)
 
-    #Output outcome to user
+        #Calculate game outcome and output
+        my_rps_game.play_with_camera_input((parse_model_output(prediction)))
+
+        #Increase game count
+        game_count += 1
+        if(game_count == max_game_count):
+            break
+
+        #Start new game
+        game_ongoing = True
+        game_start_time = time.time()
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-    elif cv2.waitKey(1) & 0xFF == ord('e'):
-        game_start
-        pass#Start game countdown
+        
+    
+#Output Score
+output_score()
 
 # After the loop release the cap object
 cap.release()
