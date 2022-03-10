@@ -14,6 +14,12 @@ class Rps:
         self.resolve_choices()
         pass
 
+    def play_with_predetermined_input(self, player_choice):
+        self.player_choice = player_choice
+        self.computer_choice = random.choice(self.choice_list)
+        self.resolve_choices()
+        pass
+    
     def get_choices(self):
         #Get user input and choose computer choice randomly
         self.computer_choice = random.choice(self.choice_list)
