@@ -64,6 +64,16 @@ class Rps:
                 self.computer_score += 1
         pass
 
+    def output_score(self):
+        print("Results: ")
+        print("Your Score -> " + str(self.player_score) + "  :  " + str(self.computer_score) + " <- Computer Score")
+        if(self.player_score == self.computer_score):
+            print("Draw")
+        elif(self.player_score > self.computer_score):
+            print("You Win!")
+        else:
+            print("Computer Wins!")
+
 if __name__ == "__main__":
     choice_list = ["rock", "paper", "scissors"]
     rps_game = Rps(choice_list)

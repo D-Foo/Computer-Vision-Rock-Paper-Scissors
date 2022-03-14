@@ -15,21 +15,12 @@ def parse_model_output(prediction):
     return output_list[largest_index]
 
 def render_text(text_str, frame):
-   
     x = 200
     y = 60
     color = (255, 255, 255)
     cv2.putText(frame, text_str, (x, y), 0, 1, color, 1, cv2.LINE_AA)
 
-def output_score():
-    print("Results: ")
-    print("Your Score -> " + str(my_rps_game.player_score) + "  :  " + str(my_rps_game.computer_score) + " <- Computer Score")
-    if(my_rps_game.player_score == my_rps_game.computer_score):
-        print("Draw")
-    elif(my_rps_game.player_score > my_rps_game.computer_score):
-        print("You Win!")
-    else:
-        print("Computer Wins!")
+
 
 #Variables
 choice_list = ["rock", "paper", "scissors"]
@@ -94,7 +85,7 @@ while True:
         
     
 #Output Score
-output_score()
+my_rps_game.output_score()
 
 # After the loop release the cap object
 cap.release()
