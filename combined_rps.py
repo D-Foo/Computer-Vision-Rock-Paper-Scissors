@@ -15,8 +15,8 @@ def parse_model_output(prediction):
     return output_list[largest_index]
 
 def render_text(text_str, frame):
-    x = 200
-    y = 60
+    x = 540
+    y = 40
     color = (255, 255, 255)
     cv2.putText(frame, text_str, (x, y), 0, 1, color, 1, cv2.LINE_AA)
 
