@@ -32,7 +32,7 @@ game_ongoing = False
 rps_countdown = 3.0 #How long to wait before getting user input
 render_text_str = ""
 game_count = 0
-max_game_count = 5
+score_victory_condition = 3
 
 #Main Loop
 while True:  
@@ -73,7 +73,7 @@ while True:
 
         #Increase game count
         game_count += 1
-        if(game_count == max_game_count):
+        if(my_rps_game.player_score >= score_victory_condition or my_rps_game.computer_score >= score_victory_condition):
             break
 
         #Start new game
